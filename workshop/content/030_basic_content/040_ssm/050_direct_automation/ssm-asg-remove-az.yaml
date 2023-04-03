@@ -1,5 +1,5 @@
 ---
-description: Terminate all instances of ASG in a particular AZ
+description: Remove a particular AZ from ASG
 schemaVersion: '0.3'
 assumeRole: "{{ AutomationAssumeRole }}"
 parameters:
@@ -54,7 +54,7 @@ mainSteps:
   onCancel: 'step:ExitList'
   timeoutSeconds: 60
   inputs:
-    Runtime: "python3.6"
+    Runtime: "python3.8"
     Handler: "script_handler"
     InputPayload: 
       "vpcZoneIdentifier": "{{ DescribeAutoscaling.VPCZoneIdentifier }}"

@@ -170,12 +170,20 @@ func launcher(client *http.Client, id int, targetUrl string, numthreads int) {
 			logLine := emf.New().Namespace("goad")
 			logLine.MetricAs("_invocation_id", id, emf.Count)
 			logLine.MetricAs("_invocations", int(runCount), emf.Count)
+			/*
 			logLine.MetricFloatAs("success", (100.0*res_success)/runCount, emf.Percent)
 			logLine.MetricFloatAs("status_2xx", (100.0*res_2xx)/runCount, emf.Percent)
 			logLine.MetricFloatAs("status_4xx", (100.0*res_4xx)/runCount, emf.Percent)
 			logLine.MetricFloatAs("status_5xx", (100.0*res_5xx)/runCount, emf.Percent)
 			logLine.MetricFloatAs("error_connect", (100.0*res_err_connect)/runCount, emf.Percent)
 			logLine.MetricFloatAs("error_read", (100.0*res_err_read)/runCount, emf.Percent)
+			*/
+			logLine.MetricAs("success", int(res_success), emf.Count)
+			logLine.MetricAs("status_2xx", int(res_2xx), emf.Count)
+			logLine.MetricAs("status_4xx", int(res_4xx), emf.Count)
+			logLine.MetricAs("status_5xx", int(res_5xx), emf.Count)
+			logLine.MetricAs("error_connect", int(res_err_connect), emf.Count)
+			logLine.MetricAs("error_read", int(res_err_read), emf.Count)
 			logLine.MetricFloatAs("duration_min", float64(res_duration_min.Milliseconds()), emf.Milliseconds)
 			logLine.MetricFloatAs("duration_avg", float64((res_duration_sum / time.Duration(runCount)).Milliseconds()), emf.Milliseconds)
 			logLine.MetricFloatAs("duration_max", float64(res_duration_max.Milliseconds()), emf.Milliseconds)
@@ -216,8 +224,8 @@ func launcher(client *http.Client, id int, targetUrl string, numthreads int) {
 					},
 					&cloudwatch.MetricDatum{
 						MetricName:        aws.String("success"),
-						Unit:              aws.String("Percent"),
-						Value:             aws.Float64((100.0 * res_success) / runCount),
+						Unit:              aws.String("Count"),
+						Value:             aws.Float64(res_success),
 						StorageResolution: aws.Int64(1),
 						Timestamp:         aws.Time(timeStamp),
 						Dimensions: []*cloudwatch.Dimension{
@@ -229,8 +237,8 @@ func launcher(client *http.Client, id int, targetUrl string, numthreads int) {
 					},
 					&cloudwatch.MetricDatum{
 						MetricName:        aws.String("status_2xx"),
-						Unit:              aws.String("Percent"),
-						Value:             aws.Float64((100.0 * res_2xx) / runCount),
+						Unit:              aws.String("Count"),
+						Value:             aws.Float64(res_2xx),
 						StorageResolution: aws.Int64(1),
 						Timestamp:         aws.Time(timeStamp),
 						Dimensions: []*cloudwatch.Dimension{
@@ -242,8 +250,8 @@ func launcher(client *http.Client, id int, targetUrl string, numthreads int) {
 					},
 					&cloudwatch.MetricDatum{
 						MetricName:        aws.String("status_4xx"),
-						Unit:              aws.String("Percent"),
-						Value:             aws.Float64((100.0 * res_4xx) / runCount),
+						Unit:              aws.String("Count"),
+						Value:             aws.Float64(res_4xx),
 						StorageResolution: aws.Int64(1),
 						Timestamp:         aws.Time(timeStamp),
 						Dimensions: []*cloudwatch.Dimension{
@@ -255,8 +263,8 @@ func launcher(client *http.Client, id int, targetUrl string, numthreads int) {
 					},
 					&cloudwatch.MetricDatum{
 						MetricName:        aws.String("status_5xx"),
-						Unit:              aws.String("Percent"),
-						Value:             aws.Float64((100.0 * res_5xx) / runCount),
+						Unit:              aws.String("Count"),
+						Value:             aws.Float64(res_5xx),
 						StorageResolution: aws.Int64(1),
 						Timestamp:         aws.Time(timeStamp),
 						Dimensions: []*cloudwatch.Dimension{
@@ -268,8 +276,8 @@ func launcher(client *http.Client, id int, targetUrl string, numthreads int) {
 					},
 					&cloudwatch.MetricDatum{
 						MetricName:        aws.String("error_connect"),
-						Unit:              aws.String("Percent"),
-						Value:             aws.Float64((100.0 * res_err_connect) / runCount),
+						Unit:              aws.String("Count"),
+						Value:             aws.Float64(res_err_connect),
 						StorageResolution: aws.Int64(1),
 						Timestamp:         aws.Time(timeStamp),
 						Dimensions: []*cloudwatch.Dimension{
@@ -281,8 +289,8 @@ func launcher(client *http.Client, id int, targetUrl string, numthreads int) {
 					},
 					&cloudwatch.MetricDatum{
 						MetricName:        aws.String("error_read"),
-						Unit:              aws.String("Percent"),
-						Value:             aws.Float64((100.0 * res_err_read) / runCount),
+						Unit:              aws.String("Count"),
+						Value:             aws.Float64(res_err_read),
 						StorageResolution: aws.Int64(1),
 						Timestamp:         aws.Time(timeStamp),
 						Dimensions: []*cloudwatch.Dimension{

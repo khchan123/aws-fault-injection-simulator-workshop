@@ -1,0 +1,27 @@
+{
+    "description": "Remove AZ from ASG/LB",
+    "stopConditions": [
+        {
+            "source": "none"
+        }
+    ],
+    "targets": {
+    },
+    "actions": {
+        "RemoveAZfromASG": {
+            "actionId": "aws:ssm:start-automation-execution",
+            "description": "Remove AZ from ASG/LB",
+            "parameters": {
+                "documentArn": "${DEMO_SSM_DOCUMENT_ARN}",
+                "documentParameters": "{\"AvailabilityZone\": \"${DEMO_AZ_NAME}\", \"Duration\": \"10\", \"AutoscalingGroupName\": \"${DEMO_ASG_NAME}\", \"AutomationAssumeRole\": \"${SSM_ROLE_ARN}\"}",
+                "maxDuration": "PT30M"
+            },
+            "targets": {
+            }
+        }
+    },
+    "roleArn": "${FIS_ROLE_ARN}",
+    "tags": {
+        "Name": "${DEMO_TEMPLATE_NAME}"
+    }
+}

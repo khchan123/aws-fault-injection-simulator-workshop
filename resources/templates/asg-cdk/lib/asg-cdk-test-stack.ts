@@ -77,15 +77,23 @@ export class AsgCdkTestStack extends Stack {
 
     const myASG = new autoscaling.AutoScalingGroup(this, 'ASG', {
       vpc,
-      instanceType: new ec2.InstanceType('t2.micro'),
+      instanceType: new ec2.InstanceType('t3.micro'),
       role: instanceRole,
       machineImage: amazon2,
-      minCapacity: 1,
-      maxCapacity: 9,
+      blockDevices: [
+        {
+            deviceName: '/dev/xvda',
+            volume: autoscaling.BlockDeviceVolume.ebs(8, {
+              volumeType: autoscaling.EbsDeviceVolumeType.GP3,
+            }),
+          },
+      ],
+      minCapacity: 4,
+      maxCapacity: 6,
       // // This is tempting for NACL tests but it breaks things really badly
       // healthCheck: autoscaling.HealthCheck.elb({grace: cdk.Duration.seconds(180)}),
       groupMetrics: [autoscaling.GroupMetrics.all()],
-      desiredCapacity: 1,
+      desiredCapacity: 4,
       init: ec2.CloudFormationInit.fromElements(
         ec2.InitFile.fromString('/home/ec2-user/.aws/config',
           `[default]\nregion = ${this.region}\n`, {
@@ -218,7 +226,7 @@ export class AsgCdkTestStack extends Stack {
 
     const myAsgCpuAlarmHigh = new cloudwatch.Alarm(this, 'FisAsgHighCpuAlarm', {
       metric: myAsgCpuMetric,
-      threshold: 90.0,
+      threshold: 50.0,
       comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 1,
       // datapointsToAlarm: 1,
@@ -275,10 +283,10 @@ export class AsgCdkTestStack extends Stack {
       vpc,
       healthCheck: {
         healthyHttpCodes: '200-299',
-        healthyThresholdCount: 2,
-        interval: Duration.seconds(20),
-        timeout: Duration.seconds(15),
-        unhealthyThresholdCount: 10,
+        healthyThresholdCount: 10,
+        interval: Duration.seconds(5),
+        timeout: Duration.seconds(4),
+        unhealthyThresholdCount: 2,
         path: '/'
       }
     });

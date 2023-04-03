@@ -28,11 +28,12 @@ export class FisStackRdsAurora extends cdk.Stack {
     const auroraCredentials = rds.Credentials.fromGeneratedSecret('clusteradmin', { secretName: "FisAuroraSecret"});
     const aurora = new rds.DatabaseCluster(this, 'FisWorkshopRdsAurora', {
       engine: rds.DatabaseClusterEngine.auroraMysql({ 
-        version: rds.AuroraMysqlEngineVersion.VER_2_11_1
+        version: rds.AuroraMysqlEngineVersion.VER_3_02_2
       }),
       credentials: auroraCredentials,
       defaultDatabaseName: 'testdb',
       instanceProps: {
+        instanceType: new InstanceType('t4g.medium'),
         vpcSubnets: {
           subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
         },
@@ -53,12 +54,12 @@ export class FisStackRdsAurora extends cdk.Stack {
       //   version: rds.PostgresEngineVersion.VER_13_1,
       // }),
       engine: rds.DatabaseInstanceEngine.mysql({
-        version: rds.MysqlEngineVersion.VER_5_7,
+        version: rds.MysqlEngineVersion.VER_8_0,
       }),
       credentials: mysqlCredentials,
       databaseName: 'testdb',
       instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.BURSTABLE3,
+        ec2.InstanceClass.BURSTABLE4_GRAVITON,
         ec2.InstanceSize.MICRO,
       ),
       multiAz: true,

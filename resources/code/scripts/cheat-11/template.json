@@ -1,0 +1,56 @@
+{
+    "description": "Simulate AZ failure on EC2/ASG/LB",
+    "stopConditions": [
+        {
+            "source": "none"
+        }
+    ],
+    "targets": {
+        "Subnets-Target-1": {
+            "resourceType": "aws:ec2:subnet",
+            "parameters": {
+                "availabilityZoneIdentifier": "${DEMO_AZ_NAME}",
+                "vpc": "${VPC_ID}"
+            },
+            "selectionMode": "ALL"
+        }
+    },
+    "actions": {
+        "TerminateInstances": {
+            "actionId": "aws:ssm:start-automation-execution",
+            "description": "Terminate Instances in AZ",
+            "parameters": {
+                "documentArn": "${SSM_DOCUMENT_1_ARN}",
+                "documentParameters": "{\"AvailabilityZone\": \"${DEMO_AZ_NAME}\", \"AutoscalingGroupName\": \"${DEMO_ASG_NAME}\", \"AutomationAssumeRole\": \"${SSM_ROLE_ARN}\"}",
+                "maxDuration": "PT3M"
+            },
+            "targets": {
+            }
+        },
+        "RemoveAZfromASG": {
+            "actionId": "aws:ssm:start-automation-execution",
+            "description": "Remove AZ from ASG/LB",
+            "parameters": {
+                "documentArn": "${SSM_DOCUMENT_2_ARN}",
+                "documentParameters": "{\"AvailabilityZone\": \"${DEMO_AZ_NAME}\", \"Duration\": \"10\", \"AutoscalingGroupName\": \"${DEMO_ASG_NAME}\", \"AutomationAssumeRole\": \"${SSM_ROLE_ARN}\"}",
+                "maxDuration": "PT30M"
+            },
+            "targets": {
+            }
+        },
+        "DisruptNetwork": {
+            "actionId": "aws:network:disrupt-connectivity",
+            "parameters": {
+                "duration": "PT10M",
+                "scope": "availability-zone"
+            },
+            "targets": {
+                "Subnets": "Subnets-Target-1"
+            }
+        }
+    },
+    "roleArn": "${FIS_ROLE_ARN}",
+    "tags": {
+        "Name": "${DEMO_TEMPLATE_NAME}"
+    }
+}

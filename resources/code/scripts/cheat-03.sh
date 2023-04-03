@@ -7,7 +7,7 @@ export REGION=$(aws ec2 describe-availability-zones --output text --query 'Avail
 export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query 'Account')
 
 # check if we already have a correctly named template
-export TEMPLATE_NAME="FisWorkshopExp1Run1"
+export TEMPLATE_NAME="TerminateSingleInstance"
 
 EXISTS=$( aws fis list-experiment-templates --query "experimentTemplates[?tags.Name=='${TEMPLATE_NAME}'].id" --output text )
 

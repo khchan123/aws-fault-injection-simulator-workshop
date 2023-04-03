@@ -3,9 +3,9 @@
 echo "Create FIS template for Demo"
 
 # Set required variables
-export DEMO_TEMPLATE_NAME=TerminateAsgInstances
+export DEMO_TEMPLATE_NAME=RemoveAZfromASG
 
-export DEMO_SSM_DOCUMENT_NAME=TerminateAsgInstances
+export DEMO_SSM_DOCUMENT_NAME=RemoveAZfromASG
 export DEMO_SSM_DOCUMENT_ARN=arn:aws:ssm:${REGION}:${ACCOUNT_ID}:document/${DEMO_SSM_DOCUMENT_NAME}
 export REGION=$(aws ec2 describe-availability-zones --output text --query 'AvailabilityZones[0].[RegionName]')
 export ACCOUNT_ID=$(aws sts get-caller-identity --output text --query 'Account')
@@ -24,14 +24,13 @@ EXISTS=$( aws fis list-experiment-templates --query "experimentTemplates[?tags.N
 
 if [ -z "$EXISTS" ]; then
 
-    cat cheat-09/template.json | envsubst > /tmp/cheat-09.json
+    cat cheat-10/template.json | envsubst > /tmp/cheat-10.json
 
     aws fis create-experiment-template \
-    --cli-input-json file:///tmp/cheat-09.json
+    --cli-input-json file:///tmp/cheat-10.json
     if [ $? -ne 0 ]; then
-        cat /tmp/cheat-09.json
+        cat /tmp/cheat-10.json
     fi
 else
     echo "Template exists with ID ${EXISTS}"
 fi
-  

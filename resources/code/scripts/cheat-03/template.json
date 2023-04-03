@@ -1,21 +1,21 @@
 {
-    "description": "Terminate 50% of instances based on Name Tag",
+    "description": "Terminate single EC2 instance from ASG",
     "targets": {
-        "FisWorkshopAsg-50Percent": {
+        "FisWorkshopAsg-SingleInstance": {
             "resourceType": "aws:ec2:instance",
             "resourceTags": {
                 "Name": "FisStackAsg/ASG"
             },
-            "selectionMode": "PERCENT(50)"
+            "selectionMode": "COUNT(1)"
         }
     },
     "actions": {
-        "FisWorkshopTerminateAsg-1-CLI": {
+        "TerminateInstance": {
             "actionId": "aws:ec2:terminate-instances",
-            "description": "Terminate 50% of instances based on Name Tag",
+            "description": "Terminate single instance based on Name Tag",
             "parameters": {},
             "targets": {
-                "Instances": "FisWorkshopAsg-50Percent"
+                "Instances": "FisWorkshopAsg-SingleInstance"
             }
         },
         "Wait": {
@@ -31,12 +31,6 @@
         }
     ],
     "roleArn": "arn:aws:iam::${ACCOUNT_ID}:role/FisWorkshopServiceRole",
-    "logConfiguration": {
-        "cloudWatchLogsConfiguration": {
-            "logGroupArn": "arn:aws:logs:${REGION}:${ACCOUNT_ID}:log-group:/fis-workshop/fis-logs:*"
-        },
-        "logSchemaVersion": 1
-    },
     "tags": {
         "Name": "${TEMPLATE_NAME}"
     }

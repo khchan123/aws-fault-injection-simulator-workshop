@@ -30,7 +30,7 @@ Parameters:
   InstanceType:
     Description: 'Server instance type'
     Type: String
-    Default: t2.micro
+    Default: t3.micro
   # SshKeyName:
   #   Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
   #   Type: AWS::EC2::KeyPair::KeyName

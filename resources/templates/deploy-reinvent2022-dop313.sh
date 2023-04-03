@@ -58,7 +58,7 @@ wait
 call_deploy_script "slr" "Service linked role stack"
 
 # Goad stack moved to CDK
-# call_deploy_script "goad-cdk" "Load generator stack"
+call_deploy_script "goad-cdk" "Load generator stack"
 
 # Access controls using CFN
 call_deploy_script "access-controls" "Access controls stack"
