@@ -226,7 +226,7 @@ export class AsgCdkTestStack extends Stack {
 
     const myAsgCpuAlarmHigh = new cloudwatch.Alarm(this, 'FisAsgHighCpuAlarm', {
       metric: myAsgCpuMetric,
-      threshold: 50.0,
+      threshold: 80.0,
       comparisonOperator: cloudwatch.ComparisonOperator.GREATER_THAN_OR_EQUAL_TO_THRESHOLD,
       evaluationPeriods: 1,
       // datapointsToAlarm: 1,

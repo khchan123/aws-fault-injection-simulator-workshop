@@ -139,7 +139,7 @@ Original source repo came from [AWS chaos engineering workshop](https://chaos-en
        ]
    }
    ```
-   Then create IAM role **FisWorkshopServiceRole**. Select trusted entity **AWS account**, **This account**. Attach and AWS managed policy start with **AWSFaultInjectionSimulatorEC2Access** and the policy **FisWorkshopServicePolicy** just created. After the IAM role **FisWorkshopServiceRole**, edit the trust policy as follow:
+   Then create IAM role **FisWorkshopServiceRole**. Select trusted entity **AWS account**, **This account**. Attach and AWS managed policy start with **AWSFaultInjectionSimulator** and the policy **FisWorkshopServicePolicy** just created. After the IAM role **FisWorkshopServiceRole**, edit the trust policy as follow:
    ```json
    {
        "Version": "2012-10-17",
